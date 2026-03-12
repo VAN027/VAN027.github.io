@@ -9,336 +9,291 @@
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&display=swap');
         body { font-family: 'Noto Sans SC', sans-serif; }
         canvas { border: 2px solid #e5e7eb; background: #f8fafc; }
-        .result-card { transition: all 0.3s ease; }
+        .input-table td { padding: 12px 8px; }
     </style>
 </head>
 <body class="bg-gray-50">
-    <div class="max-w-7xl mx-auto p-6">
-        <!-- 头部 -->
-        <div class="flex justify-between items-center mb-8">
+    <div class="max-w-6xl mx-auto p-6">
+        <!-- 极简头部 -->
+        <div class="flex justify-between items-center mb-6">
             <div>
-                <h1 class="text-4xl font-bold text-gray-900">电视挂架打孔计算器</h1>
-                <p class="text-gray-600 mt-2">输入参数 → 自动计算打孔坐标 → 实时可视化预览</p>
+                <h1 class="text-3xl font-bold text-gray-900">电视挂架打孔计算器</h1>
+                <p class="text-gray-500 text-sm mt-1">输入参数 → 自动计算 → 实时预览打孔位置</p>
             </div>
-            <div class="flex gap-4">
+            <div class="flex gap-3">
                 <button onclick="resetForm()" 
-                        class="px-6 py-3 bg-gray-200 hover:bg-gray-300 rounded-xl font-medium flex items-center gap-2">
-                    <span>重置</span>
+                        class="px-5 py-2.5 bg-gray-100 hover:bg-gray-200 text-sm font-medium rounded-2xl flex items-center gap-2 transition">
+                    重置
                 </button>
                 <button onclick="exportResults()" 
-                        class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-medium flex items-center gap-2">
+                        class="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-2xl flex items-center gap-2 transition">
                     导出结果
                 </button>
             </div>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-            <!-- 输入模块 -->
-            <div class="lg:col-span-5 bg-white rounded-3xl shadow-xl p-8">
-                <h2 class="text-2xl font-semibold mb-6 text-gray-800">参数输入</h2>
+            
+            <!-- 左侧：参数输入（更简洁） -->
+            <div class="lg:col-span-4 bg-white rounded-3xl shadow shadow-gray-200 p-7">
+                <h2 class="text-xl font-semibold mb-6 text-gray-800">参数设置</h2>
                 
-                <!-- 基本参数 -->
+                <!-- 基本参数 - 紧凑两列 -->
                 <div class="mb-8">
-                    <h3 class="text-lg font-medium text-gray-700 mb-4 flex items-center gap-2">
-                        <span class="w-3 h-3 bg-blue-500 rounded-full"></span>
-                        基本参数
-                    </h3>
-                    <div class="grid grid-cols-2 gap-6">
+                    <div class="text-xs uppercase tracking-widest text-gray-500 mb-3">基本参数</div>
+                    <div class="grid grid-cols-2 gap-5">
                         <div>
-                            <label class="block text-sm font-medium text-gray-600 mb-1">背景墙长度 (cm)</label>
+                            <label class="block text-xs text-gray-500 mb-1">背景墙长度 (cm)</label>
                             <input id="wall" type="number" step="0.1" value="300" 
-                                   class="w-full px-5 py-4 border border-gray-300 rounded-2xl focus:outline-none focus:border-blue-500 text-lg"
+                                   class="w-full px-4 py-3 border border-gray-200 rounded-2xl focus:border-blue-500 text-base"
                                    oninput="liveUpdate()">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-600 mb-1">电视机长度 (cm)</label>
+                            <label class="block text-xs text-gray-500 mb-1">电视机长度 (cm)</label>
                             <input id="tvLen" type="number" step="0.1" value="120" 
-                                   class="w-full px-5 py-4 border border-gray-300 rounded-2xl focus:outline-none focus:border-blue-500 text-lg"
+                                   class="w-full px-4 py-3 border border-gray-200 rounded-2xl focus:border-blue-500 text-base"
                                    oninput="liveUpdate()">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-600 mb-1">电视最底端离地面高度 H (cm)</label>
+                            <label class="block text-xs text-gray-500 mb-1">电视底端高度 H (cm)</label>
                             <input id="H" type="number" step="0.1" value="60" 
-                                   class="w-full px-5 py-4 border border-gray-300 rounded-2xl focus:outline-none focus:border-blue-500 text-lg"
+                                   class="w-full px-4 py-3 border border-gray-200 rounded-2xl focus:border-blue-500 text-base"
                                    oninput="liveUpdate()">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-600 mb-1">电视机高度 (cm) <span class="text-xs text-gray-400">(用于预览)</span></label>
+                            <label class="block text-xs text-gray-500 mb-1">电视高度 (预览用 cm)</label>
                             <input id="tvHeight" type="number" step="0.1" value="65" 
-                                   class="w-full px-5 py-4 border border-gray-300 rounded-2xl focus:outline-none focus:border-blue-500 text-lg"
+                                   class="w-full px-4 py-3 border border-gray-200 rounded-2xl focus:border-blue-500 text-base"
                                    oninput="liveUpdate()">
                         </div>
                     </div>
                 </div>
 
-                <!-- 挂架参数 -->
+                <!-- 挂架偏移 - 超简洁表格 -->
                 <div>
-                    <h3 class="text-lg font-medium text-gray-700 mb-4 flex items-center gap-2">
-                        <span class="w-3 h-3 bg-emerald-500 rounded-full"></span>
-                        挂架偏移参数
-                    </h3>
-                    
-                    <!-- 普通挂架 -->
-                    <div class="mb-6 p-6 bg-gray-50 rounded-2xl">
-                        <div class="flex items-center gap-3 mb-4">
-                            <div class="w-6 h-6 bg-red-500 rounded-lg flex items-center justify-center text-white text-xs font-bold">普</div>
-                            <span class="font-medium">普通挂架</span>
-                        </div>
-                        <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-600 mb-1">VX（水平偏移 cm）</label>
-                                <input id="VX" type="number" step="0.1" value="10" 
-                                       class="w-full px-5 py-3 border border-gray-300 rounded-2xl focus:outline-none focus:border-blue-500"
-                                       oninput="liveUpdate()">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-600 mb-1">VY（垂直偏移 cm）</label>
-                                <input id="VY" type="number" step="0.1" value="15" 
-                                       class="w-full px-5 py-3 border border-gray-300 rounded-2xl focus:outline-none focus:border-blue-500"
-                                       oninput="liveUpdate()">
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- 左超薄挂架 -->
-                    <div class="mb-6 p-6 bg-gray-50 rounded-2xl">
-                        <div class="flex items-center gap-3 mb-4">
-                            <div class="w-6 h-6 bg-blue-500 rounded-lg flex items-center justify-center text-white text-xs font-bold">左</div>
-                            <span class="font-medium">左超薄挂架</span>
-                        </div>
-                        <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-600 mb-1">VX1（水平偏移 cm）</label>
-                                <input id="VX1" type="number" step="0.1" value="8" 
-                                       class="w-full px-5 py-3 border border-gray-300 rounded-2xl focus:outline-none focus:border-blue-500"
-                                       oninput="liveUpdate()">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-600 mb-1">VY1（垂直偏移 cm）</label>
-                                <input id="VY1" type="number" step="0.1" value="12" 
-                                       class="w-full px-5 py-3 border border-gray-300 rounded-2xl focus:outline-none focus:border-blue-500"
-                                       oninput="liveUpdate()">
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- 右超薄挂架 -->
-                    <div class="p-6 bg-gray-50 rounded-2xl">
-                        <div class="flex items-center gap-3 mb-4">
-                            <div class="w-6 h-6 bg-green-500 rounded-lg flex items-center justify-center text-white text-xs font-bold">右</div>
-                            <span class="font-medium">右超薄挂架</span>
-                        </div>
-                        <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-600 mb-1">VX2（水平偏移 cm）</label>
-                                <input id="VX2" type="number" step="0.1" value="112" 
-                                       class="w-full px-5 py-3 border border-gray-300 rounded-2xl focus:outline-none focus:border-blue-500"
-                                       oninput="liveUpdate()">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-600 mb-1">VY2（垂直偏移 cm）</label>
-                                <input id="VY2" type="number" step="0.1" value="12" 
-                                       class="w-full px-5 py-3 border border-gray-300 rounded-2xl focus:outline-none focus:border-blue-500"
-                                       oninput="liveUpdate()">
-                            </div>
-                        </div>
-                    </div>
+                    <div class="text-xs uppercase tracking-widest text-gray-500 mb-3">挂架偏移参数</div>
+                    <table class="w-full text-sm border-collapse">
+                        <thead>
+                            <tr class="border-b border-gray-100">
+                                <th class="text-left py-3 font-medium text-gray-500">挂架类型</th>
+                                <th class="text-center py-3 font-medium text-gray-500">水平偏移 (cm)</th>
+                                <th class="text-center py-3 font-medium text-gray-500">垂直偏移 (cm)</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100">
+                            <!-- 普通挂架 -->
+                            <tr>
+                                <td class="py-4">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-6 h-6 bg-red-500 rounded-lg flex items-center justify-center text-white text-[10px] font-bold">普</div>
+                                        <span class="font-medium text-gray-700">普通挂架</span>
+                                    </div>
+                                </td>
+                                <td class="input-table"><input id="VX" type="number" step="0.1" value="10" 
+                                       class="w-full px-4 py-2.5 border border-gray-200 rounded-2xl focus:border-blue-500 text-center text-base" 
+                                       oninput="liveUpdate()"></td>
+                                <td class="input-table"><input id="VY" type="number" step="0.1" value="15" 
+                                       class="w-full px-4 py-2.5 border border-gray-200 rounded-2xl focus:border-blue-500 text-center text-base" 
+                                       oninput="liveUpdate()"></td>
+                            </tr>
+                            <!-- 左超薄 -->
+                            <tr>
+                                <td class="py-4">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-6 h-6 bg-blue-500 rounded-lg flex items-center justify-center text-white text-[10px] font-bold">左</div>
+                                        <span class="font-medium text-gray-700">左超薄挂架</span>
+                                    </div>
+                                </td>
+                                <td class="input-table"><input id="VX1" type="number" step="0.1" value="8" 
+                                       class="w-full px-4 py-2.5 border border-gray-200 rounded-2xl focus:border-blue-500 text-center text-base" 
+                                       oninput="liveUpdate()"></td>
+                                <td class="input-table"><input id="VY1" type="number" step="0.1" value="12" 
+                                       class="w-full px-4 py-2.5 border border-gray-200 rounded-2xl focus:border-blue-500 text-center text-base" 
+                                       oninput="liveUpdate()"></td>
+                            </tr>
+                            <!-- 右超薄 -->
+                            <tr>
+                                <td class="py-4">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-6 h-6 bg-green-500 rounded-lg flex items-center justify-center text-white text-[10px] font-bold">右</div>
+                                        <span class="font-medium text-gray-700">右超薄挂架</span>
+                                    </div>
+                                </td>
+                                <td class="input-table"><input id="VX2" type="number" step="0.1" value="112" 
+                                       class="w-full px-4 py-2.5 border border-gray-200 rounded-2xl focus:border-blue-500 text-center text-base" 
+                                       oninput="liveUpdate()"></td>
+                                <td class="input-table"><input id="VY2" type="number" step="0.1" value="12" 
+                                       class="w-full px-4 py-2.5 border border-gray-200 rounded-2xl focus:border-blue-500 text-center text-base" 
+                                       oninput="liveUpdate()"></td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
 
-            <!-- 预览 + 结果模块 -->
-            <div class="lg:col-span-7">
-                <!-- Canvas 可视化模块 -->
-                <div class="bg-white rounded-3xl shadow-xl p-8 mb-8">
-                    <h2 class="text-2xl font-semibold mb-6 text-gray-800 flex items-center justify-between">
-                        实时可视化预览
-                        <span id="scaleInfo" class="text-xs font-normal text-gray-500 bg-gray-100 px-3 py-1 rounded-full"></span>
-                    </h2>
-                    <canvas id="canvas" width="800" height="420" class="w-full rounded-2xl"></canvas>
-                    <div class="mt-4 flex justify-center gap-8 text-sm">
+            <!-- 右侧：预览 + 结果（更宽更大） -->
+            <div class="lg:col-span-8 space-y-8">
+                
+                <!-- 实时预览 -->
+                <div class="bg-white rounded-3xl shadow shadow-gray-200 p-7">
+                    <div class="flex items-center justify-between mb-4">
+                        <h2 class="text-xl font-semibold text-gray-800">实时预览</h2>
+                        <span id="scaleInfo" class="px-4 py-1 bg-gray-100 text-xs rounded-full text-gray-500"></span>
+                    </div>
+                    <canvas id="canvas" width="820" height="460" class="w-full rounded-2xl"></canvas>
+                    
+                    <div class="flex justify-center gap-8 mt-5 text-xs">
                         <div class="flex items-center gap-2">
-                            <div class="w-4 h-4 bg-red-500 rounded-full"></div>
-                            <span class="text-gray-600">普通挂架</span>
+                            <div class="w-3 h-3 bg-red-500 rounded"></div>
+                            <span>普通挂架 (VX/VY)</span>
                         </div>
                         <div class="flex items-center gap-2">
-                            <div class="w-4 h-4 bg-blue-500 rounded-full"></div>
-                            <span class="text-gray-600">左超薄挂架</span>
+                            <div class="w-3 h-3 bg-blue-500 rounded"></div>
+                            <span>左超薄 (VX1/VY1)</span>
                         </div>
                         <div class="flex items-center gap-2">
-                            <div class="w-4 h-4 bg-green-500 rounded-full"></div>
-                            <span class="text-gray-600">右超薄挂架</span>
+                            <div class="w-3 h-3 bg-green-500 rounded"></div>
+                            <span>右超薄 (VX2/VY2)</span>
                         </div>
                     </div>
                 </div>
 
-                <!-- 结果输出模块 -->
-                <div class="bg-white rounded-3xl shadow-xl p-8">
-                    <h2 class="text-2xl font-semibold mb-6 text-gray-800">计算结果</h2>
-                    <div id="results" class="grid grid-cols-2 gap-6">
+                <!-- 计算结果 -->
+                <div class="bg-white rounded-3xl shadow shadow-gray-200 p-7">
+                    <h2 class="text-xl font-semibold mb-5 text-gray-800">计算结果</h2>
+                    <div id="results" class="grid grid-cols-2 gap-5">
                         <!-- JS 动态填充 -->
                     </div>
                 </div>
             </div>
         </div>
-
-        <!-- 底部说明 -->
-        <div class="mt-12 text-center text-xs text-gray-400">
-            模块化设计 • 支持后续扩展（新增挂架类型、保存模板、导出PDF） • 纯前端实现
         </div>
     </div>
 
     <script>
-        // ==================== 计算模块（纯函数，可独立测试/扩展） ====================
+        // ==================== 计算模块（不变） ====================
         function calculatePositions(wall, tvLen, H, VX, VY, VX1, VY1, VX2, VY2) {
             if (!wall || !tvLen) return null;
-            
             const X = (wall - tvLen) / 2;
             const Y = H;
-            
             return {
                 tv: { X: X.toFixed(2), Y: Y.toFixed(2) },
-                ordinary: { 
-                    X1: (X + VX).toFixed(2), 
-                    Y1: (Y + VY).toFixed(2) 
-                },
-                leftUltra: { 
-                    LX: (X + VX1).toFixed(2), 
-                    LY: (Y + VY1).toFixed(2) 
-                },
-                rightUltra: { 
-                    RX: (X + VX2).toFixed(2), 
-                    RY: (Y + VY2).toFixed(2) 
-                }
+                ordinary: { X1: (X + VX).toFixed(2), Y1: (Y + VY).toFixed(2) },
+                leftUltra: { LX: (X + VX1).toFixed(2), LY: (Y + VY1).toFixed(2) },
+                rightUltra: { RX: (X + VX2).toFixed(2), RY: (Y + VY2).toFixed(2) }
             };
         }
 
-        // ==================== 可视化模块（Canvas 绘制，可复用） ====================
-        let canvas, ctx;
-        
-        function drawVisualization(pos, tvLen, tvHeight, wall) {
+        // ==================== 可视化模块（不变） ====================
+        function drawVisualization(pos, tvLen, tvHeight, wall, VX, VY, VX1, VY1, VX2, VY2) {
             if (!pos) return;
-            
-            canvas = document.getElementById('canvas');
-            ctx = canvas.getContext('2d');
+            const canvas = document.getElementById('canvas');
+            const ctx = canvas.getContext('2d');
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
-            const marginL = 60;
-            const marginB = 60;
-            const drawW = canvas.width - 120;
-            const drawH = canvas.height - 100;
-            
-            // 动态垂直最大高度（留出顶部空间）
-            const maxHeight = Math.max(parseFloat(pos.tv.Y) + parseFloat(tvHeight) + 40, 180);
+
+            const marginL = 60, marginB = 80, drawW = canvas.width - 120, drawH = canvas.height - 120;
+            const maxHeight = Math.max(parseFloat(pos.tv.Y) + parseFloat(tvHeight) + 50, 200);
             const scaleX = drawW / wall;
             const scaleY = drawH / maxHeight;
-            
-            const groundY = canvas.height - marginB; // 地面 Y 坐标
-            
-            // 1. 绘制背景墙（浅灰区域）
-            ctx.fillStyle = '#f1f5f9';
-            ctx.fillRect(marginL, groundY - maxHeight * scaleY, drawW, maxHeight * scaleY);
-            
-            // 2. 地面线
-            ctx.strokeStyle = '#64748b';
-            ctx.lineWidth = 4;
-            ctx.beginPath();
-            ctx.moveTo(marginL - 10, groundY);
-            ctx.lineTo(marginL + drawW + 10, groundY);
-            ctx.stroke();
-            
-            // 3. 电视机（蓝色边框）
-            const tvLeft = marginL + parseFloat(pos.tv.X) * scaleX;
-            const tvBottomScreen = groundY - parseFloat(pos.tv.Y) * scaleY;
-            const tvScreenHeight = parseFloat(tvHeight) * scaleY;
-            const tvScreenWidth = tvLen * scaleX;
-            
-            ctx.fillStyle = '#e0f2fe';
-            ctx.fillRect(tvLeft, tvBottomScreen - tvScreenHeight, tvScreenWidth, tvScreenHeight);
-            ctx.strokeStyle = '#0369a1';
-            ctx.lineWidth = 6;
-            ctx.strokeRect(tvLeft, tvBottomScreen - tvScreenHeight, tvScreenWidth, tvScreenHeight);
-            
-            // 电视标签
-            ctx.fillStyle = '#0369a1';
-            ctx.font = 'bold 16px Noto Sans SC';
-            ctx.textAlign = 'center';
-            ctx.fillText('电视机', tvLeft + tvScreenWidth/2, tvBottomScreen - tvScreenHeight - 10);
-            
-            // 4. 绘制各挂架打孔位置（圆点 + 标签）
+            const groundY = canvas.height - marginB;
+
+            // 背景墙 + 地面
+            ctx.fillStyle = '#f1f5f9'; ctx.fillRect(marginL, groundY - maxHeight * scaleY, drawW, maxHeight * scaleY);
+            ctx.strokeStyle = '#64748b'; ctx.lineWidth = 4;
+            ctx.beginPath(); ctx.moveTo(marginL-10, groundY); ctx.lineTo(marginL+drawW+10, groundY); ctx.stroke();
+
+            // 电视机
+            const tvRefX = marginL + parseFloat(pos.tv.X) * scaleX;
+            const tvBottom = groundY - parseFloat(pos.tv.Y) * scaleY;
+            const tvH = parseFloat(tvHeight) * scaleY;
+            const tvW = tvLen * scaleX;
+            ctx.fillStyle = '#e0f2fe'; ctx.fillRect(tvRefX, tvBottom - tvH, tvW, tvH);
+            ctx.strokeStyle = '#0369a1'; ctx.lineWidth = 6; ctx.strokeRect(tvRefX, tvBottom - tvH, tvW, tvH);
+            ctx.fillStyle = '#0369a1'; ctx.font = 'bold 15px Noto Sans SC'; ctx.textAlign = 'center';
+            ctx.fillText('电视机', tvRefX + tvW/2, tvBottom - tvH - 10);
+
+            // 打孔点
             const drawPoint = (x, y, color, label) => {
-                const screenX = marginL + parseFloat(x) * scaleX;
-                const screenY = groundY - parseFloat(y) * scaleY;
-                
-                // 圆点
-                ctx.fillStyle = color;
-                ctx.beginPath();
-                ctx.arc(screenX, screenY, 9, 0, Math.PI * 2);
-                ctx.fill();
-                
-                // 外圈
-                ctx.strokeStyle = '#fff';
-                ctx.lineWidth = 3;
-                ctx.beginPath();
-                ctx.arc(screenX, screenY, 9, 0, Math.PI * 2);
-                ctx.stroke();
-                
-                // 标签
-                ctx.fillStyle = '#1e2937';
-                ctx.font = '500 14px Noto Sans SC';
-                ctx.textAlign = 'left';
-                ctx.fillText(label, screenX + 18, screenY + 5);
+                const sx = marginL + parseFloat(x) * scaleX;
+                const sy = groundY - parseFloat(y) * scaleY;
+                ctx.fillStyle = color; ctx.beginPath(); ctx.arc(sx, sy, 9, 0, Math.PI*2); ctx.fill();
+                ctx.strokeStyle = '#fff'; ctx.lineWidth = 3; ctx.beginPath(); ctx.arc(sx, sy, 9, 0, Math.PI*2); ctx.stroke();
+                ctx.fillStyle = '#1f2937'; ctx.font = '600 13px Noto Sans SC'; ctx.textAlign = 'left';
+                ctx.fillText(label, sx + 20, sy + 5);
             };
-            
-            drawPoint(pos.ordinary.X1, pos.ordinary.Y1, '#ef4444', '普通挂架');
+            drawPoint(pos.ordinary.X1, pos.ordinary.Y1, '#ef4444', '普通');
             drawPoint(pos.leftUltra.LX, pos.leftUltra.LY, '#3b82f6', '左超薄');
             drawPoint(pos.rightUltra.RX, pos.rightUltra.RY, '#22c55e', '右超薄');
-            
-            // 比例信息
-            document.getElementById('scaleInfo').textContent = `比例：1cm = ${scaleX.toFixed(1)}px`;
+
+            // 偏移线 + 标注（保持直观）
+            const drawHLine = (startX, endX, y, color, txt) => {
+                ctx.strokeStyle = color; ctx.lineWidth = 2; ctx.setLineDash([5,3]);
+                ctx.beginPath(); ctx.moveTo(startX, y); ctx.lineTo(endX, y); ctx.stroke(); ctx.setLineDash([]);
+                ctx.fillStyle = color; ctx.font = 'bold 13px Noto Sans SC'; ctx.textAlign = 'center';
+                ctx.fillText(txt, (startX + endX)/2, y - 10);
+            };
+            const drawVLine = (x, startY, endY, color, txt) => {
+                ctx.strokeStyle = color; ctx.lineWidth = 2; ctx.setLineDash([5,3]);
+                ctx.beginPath(); ctx.moveTo(x, startY); ctx.lineTo(x, endY); ctx.stroke(); ctx.setLineDash([]);
+                ctx.fillStyle = color; ctx.font = 'bold 13px Noto Sans SC'; ctx.textAlign = 'left';
+                ctx.fillText(txt, x + 8, (startY + endY)/2);
+            };
+
+            const tvX = tvRefX;
+            const ordX = marginL + parseFloat(pos.ordinary.X1)*scaleX;
+            const ordY = groundY - parseFloat(pos.ordinary.Y1)*scaleY;
+            const leftX = marginL + parseFloat(pos.leftUltra.LX)*scaleX;
+            const leftY = groundY - parseFloat(pos.leftUltra.LY)*scaleY;
+            const rightX = marginL + parseFloat(pos.rightUltra.RX)*scaleX;
+            const rightY = groundY - parseFloat(pos.rightUltra.RY)*scaleY;
+
+            drawHLine(tvX, ordX, tvBottom, '#ef4444', `VX=${VX}`);
+            drawVLine(ordX, tvBottom, ordY, '#ef4444', `VY=${VY}`);
+            drawHLine(tvX, leftX, tvBottom, '#3b82f6', `VX1=${VX1}`);
+            drawVLine(leftX, tvBottom, leftY, '#3b82f6', `VY1=${VY1}`);
+            drawHLine(tvX, rightX, tvBottom, '#22c55e', `VX2=${VX2}`);
+            drawVLine(rightX, tvBottom, rightY, '#22c55e', `VY2=${VY2}`);
+
+            document.getElementById('scaleInfo').textContent = `1cm ≈ ${scaleX.toFixed(1)}px`;
         }
 
-        // ==================== 输出模块 ====================
+        // ==================== 结果模块（更紧凑） ====================
         function renderResults(pos) {
-            const container = document.getElementById('results');
-            container.innerHTML = `
-                <div class="result-card bg-gradient-to-br from-blue-50 to-white border border-blue-200 rounded-2xl p-6">
-                    <div class="text-xs uppercase tracking-widest text-blue-600 mb-3">电视机左下角</div>
-                    <div class="flex justify-between items-baseline">
-                        <span class="text-5xl font-semibold text-blue-900">${pos.tv.X}</span>
-                        <span class="text-gray-400">cm</span>
-                    </div>
-                    <div class="text-sm text-gray-500 mt-1">X = (墙长 - 电视长度)/2</div>
-                    <div class="mt-6 text-xs text-gray-400">Y（高度） = ${pos.tv.Y} cm</div>
+            document.getElementById('results').innerHTML = `
+                <div class="bg-blue-50 border border-blue-100 rounded-2xl p-5">
+                    <div class="text-[10px] text-blue-600 mb-1">电视左下角</div>
+                    <div class="text-4xl font-semibold text-blue-900">${pos.tv.X} <span class="text-base font-normal text-gray-400">cm</span></div>
+                    <div class="text-xs text-gray-500 mt-1">Y = ${pos.tv.Y} cm</div>
                 </div>
                 
-                <div class="result-card bg-gradient-to-br from-red-50 to-white border border-red-200 rounded-2xl p-6">
-                    <div class="flex items-center gap-3 mb-4">
-                        <div class="w-5 h-5 bg-red-500 rounded"></div>
-                        <div class="text-xs uppercase tracking-widest text-red-600">普通挂架</div>
+                <div class="bg-red-50 border border-red-100 rounded-2xl p-5">
+                    <div class="flex gap-2 items-center mb-2">
+                        <div class="w-4 h-4 bg-red-500 rounded"></div>
+                        <div class="text-xs text-red-600">普通挂架</div>
                     </div>
-                    <div class="grid grid-cols-2 gap-4 text-sm">
+                    <div class="text-sm space-y-1">
                         <div>X1 = ${pos.ordinary.X1} cm</div>
                         <div>Y1 = ${pos.ordinary.Y1} cm</div>
                     </div>
                 </div>
                 
-                <div class="result-card bg-gradient-to-br from-blue-50 to-white border border-blue-200 rounded-2xl p-6">
-                    <div class="flex items-center gap-3 mb-4">
-                        <div class="w-5 h-5 bg-blue-500 rounded"></div>
-                        <div class="text-xs uppercase tracking-widest text-blue-600">左超薄挂架</div>
+                <div class="bg-blue-50 border border-blue-100 rounded-2xl p-5">
+                    <div class="flex gap-2 items-center mb-2">
+                        <div class="w-4 h-4 bg-blue-500 rounded"></div>
+                        <div class="text-xs text-blue-600">左超薄挂架</div>
                     </div>
-                    <div class="grid grid-cols-2 gap-4 text-sm">
+                    <div class="text-sm space-y-1">
                         <div>LX = ${pos.leftUltra.LX} cm</div>
                         <div>LY = ${pos.leftUltra.LY} cm</div>
                     </div>
                 </div>
                 
-                <div class="result-card bg-gradient-to-br from-emerald-50 to-white border border-emerald-200 rounded-2xl p-6">
-                    <div class="flex items-center gap-3 mb-4">
-                        <div class="w-5 h-5 bg-green-500 rounded"></div>
-                        <div class="text-xs uppercase tracking-widest text-emerald-600">右超薄挂架</div>
+                <div class="bg-green-50 border border-green-100 rounded-2xl p-5">
+                    <div class="flex gap-2 items-center mb-2">
+                        <div class="w-4 h-4 bg-green-500 rounded"></div>
+                        <div class="text-xs text-green-600">右超薄挂架</div>
                     </div>
-                    <div class="grid grid-cols-2 gap-4 text-sm">
+                    <div class="text-sm space-y-1">
                         <div>RX = ${pos.rightUltra.RX} cm</div>
                         <div>RY = ${pos.rightUltra.RY} cm</div>
                     </div>
@@ -346,7 +301,7 @@
             `;
         }
 
-        // ==================== 主逻辑（实时更新） ====================
+        // ==================== 主逻辑 ====================
         function liveUpdate() {
             const wall = parseFloat(document.getElementById('wall').value) || 0;
             const tvLen = parseFloat(document.getElementById('tvLen').value) || 0;
@@ -358,16 +313,14 @@
             const VX2 = parseFloat(document.getElementById('VX2').value) || 0;
             const VY2 = parseFloat(document.getElementById('VY2').value) || 0;
             const tvHeight = parseFloat(document.getElementById('tvHeight').value) || 65;
-            
+
             const pos = calculatePositions(wall, tvLen, H, VX, VY, VX1, VY1, VX2, VY2);
-            
             if (pos) {
                 renderResults(pos);
-                drawVisualization(pos, tvLen, tvHeight, wall);
+                drawVisualization(pos, tvLen, tvHeight, wall, VX, VY, VX1, VY1, VX2, VY2);
             }
         }
 
-        // 重置表单
         function resetForm() {
             document.getElementById('wall').value = 300;
             document.getElementById('tvLen').value = 120;
@@ -382,33 +335,19 @@
             liveUpdate();
         }
 
-        // 导出结果（简单文本 + 截图提示）
         function exportResults() {
-            const resultsHTML = document.getElementById('results').innerText;
-            const text = `电视挂架打孔计算结果\n\n${resultsHTML}\n\n生成时间：${new Date().toLocaleString('zh-CN')}`;
-            
-            const blob = new Blob([text], { type: 'text/plain' });
-            const url = URL.createObjectURL(blob);
+            const text = `电视挂架打孔结果\n\n${document.getElementById('results').innerText}\n生成时间：${new Date().toLocaleString('zh-CN')}`;
+            const blob = new Blob([text], {type: 'text/plain'});
             const a = document.createElement('a');
-            a.href = url;
-            a.download = `电视挂架打孔结果_${new Date().toISOString().slice(0,10)}.txt`;
+            a.href = URL.createObjectURL(blob);
+            a.download = `挂架打孔_${new Date().toISOString().slice(0,10)}.txt`;
             a.click();
-            
-            alert('✅ 已导出文本结果！\n\n（可视化截图请使用浏览器截屏工具）');
+            alert('✅ 已导出！（截图预览请使用浏览器工具）');
         }
 
-        // ==================== 初始化 ====================
-        window.onload = function() {
-            // Tailwind 初始化
+        window.onload = () => {
             liveUpdate();
-            
-            // 键盘支持（Enter 刷新）
-            document.addEventListener('keydown', e => {
-                if (e.key === 'Enter') liveUpdate();
-            });
-            
-            console.log('%c✅ 电视挂架打孔计算器已启动\n模块化设计：输入/计算/可视化/输出 完全独立', 
-                        'color:#22c55e; font-size:13px');
+            document.addEventListener('keydown', e => { if (e.key === 'Enter') liveUpdate(); });
         };
     </script>
 </body>
