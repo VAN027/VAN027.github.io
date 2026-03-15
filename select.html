@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>选择电视型号和挂架类型</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&display=swap');
+        body { font-family: 'Noto Sans SC', sans-serif; }
+        .input-table td { padding: 12px 8px; }
+        /* 手机端优化 */
+        @media (max-width: 640px) {
+            h1 { font-size: 1.75rem !important; }
+            h2 { font-size: 1.25rem !important; }
+            .btn-mobile { font-size: 1rem !important; padding: 1rem !important; }
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <div class="max-w-6xl mx-auto p-4 sm:p-6">
+        <!-- 极简头部 -->
+        <div class="flex flex-col mb-6">
+            <div class="mb-4">
+                <h1 class="text-3xl font-bold text-gray-900">电视挂架打孔计算器</h1>
+                <p class="text-gray-500 text-sm mt-1">选择电视型号 → 选择挂架类型 → 计算打孔位置</p>
+            </div>
+        </div>
+
+        <div class="space-y-6">
+            <!-- 电视型号选择 -->
+            <div class="bg-white rounded-3xl shadow shadow-gray-200 p-5 sm:p-7">
+                <h2 class="text-xl font-semibold mb-5 sm:mb-6 text-gray-800">选择电视型号</h2>
+                
+                <!-- 电视型号选择 -->
+                <div class="space-y-4">
+                    <div class="text-xs uppercase tracking-widest text-gray-500 mb-3">电视型号</div>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm text-gray-700 mb-2">品牌</label>
+                            <select id="tvBrand" class="w-full px-4 py-3 border border-gray-200 rounded-2xl focus:border-blue-500 text-base">
+                                <option value="tcl">TCL</option>
+                                <option value="hisense">海信</option>
+                                <option value="skyworth">创维</option>
+                                <option value="sony">索尼</option>
+                                <option value="samsung">三星</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-700 mb-2">尺寸</label>
+                            <select id="tvSize" class="w-full px-4 py-3 border border-gray-200 rounded-2xl focus:border-blue-500 text-base">
+                                <option value="43">43英寸</option>
+                                <option value="50">50英寸</option>
+                                <option value="55">55英寸</option>
+                                <option value="65">65英寸</option>
+                                <option value="75">75英寸</option>
+                                <option value="85">85英寸</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-700 mb-2">型号</label>
+                            <select id="tvModel" class="w-full px-4 py-3 border border-gray-200 rounded-2xl focus:border-blue-500 text-base">
+                                <option value="model1">型号1</option>
+                                <option value="model2">型号2</option>
+                                <option value="model3">型号3</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 挂架类型选择 -->
+            <div class="bg-white rounded-3xl shadow shadow-gray-200 p-5 sm:p-7">
+                <h2 class="text-xl font-semibold mb-5 sm:mb-6 text-gray-800">选择挂架类型</h2>
+                
+                <!-- 挂架类型选择 -->
+                <div class="space-y-4">
+                    <div class="text-xs uppercase tracking-widest text-gray-500 mb-3">挂架类型</div>
+                    <div class="space-y-4">
+                        <!-- 普通挂架 -->
+                        <div class="border border-gray-200 rounded-2xl p-4 hover:border-blue-500 cursor-pointer transition" onclick="selectBracket('ordinary')">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 bg-red-500 rounded-lg flex items-center justify-center text-white text-sm font-bold">普</div>
+                                <div>
+                                    <div class="font-medium text-gray-800">普通挂架</div>
+                                    <div class="text-sm text-gray-500 mt-1">固定安装，简洁美观</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 伸缩挂架 -->
+                        <div class="border border-gray-200 rounded-2xl p-4 hover:border-blue-500 cursor-pointer transition" onclick="selectBracket('extendable')">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 bg-purple-500 rounded-lg flex items-center justify-center text-white text-sm font-bold">伸</div>
+                                <div>
+                                    <div class="font-medium text-gray-800">伸缩挂架</div>
+                                    <div class="text-sm text-gray-500 mt-1">可调节角度，灵活适用</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 超薄挂架 -->
+                        <div class="border border-gray-200 rounded-2xl p-4 hover:border-blue-500 cursor-pointer transition" onclick="selectBracket('ultra-thin')">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center text-white text-sm font-bold">超</div>
+                                <div>
+                                    <div class="font-medium text-gray-800">超薄挂架</div>
+                                    <div class="text-sm text-gray-500 mt-1">紧贴墙面，节省空间</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 底部按钮 -->
+        <div class="mt-8 flex justify-center">
+            <button id="nextBtn" onclick="goToCalculator()" 
+                    class="w-full sm:w-auto px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-2xl flex items-center justify-center gap-2 transition btn-mobile">
+                下一步：计算打孔位置
+            </button>
+        </div>
+    </div>
+
+    <script>
+        let selectedBracket = null;
+
+        function selectBracket(type) {
+            selectedBracket = type;
+            // 重置所有边框
+            document.querySelectorAll('.border-gray-200').forEach(el => {
+                el.classList.remove('border-blue-500', 'bg-blue-50');
+            });
+            // 设置选中状态
+            event.currentTarget.classList.add('border-blue-500', 'bg-blue-50');
+        }
+
+        function goToCalculator() {
+            if (!selectedBracket) {
+                alert('请选择挂架类型');
+                return;
+            }
+            
+            // 获取选择的电视型号信息
+            const tvBrand = document.getElementById('tvBrand').value;
+            const tvSize = document.getElementById('tvSize').value;
+            const tvModel = document.getElementById('tvModel').value;
+            
+            // 跳转到打孔计算页面，传递参数
+            window.location.href = `code.html?bracket=${selectedBracket}&brand=${tvBrand}&size=${tvSize}&model=${tvModel}`;
+        }
+    </script>
+</body>
+</html>
