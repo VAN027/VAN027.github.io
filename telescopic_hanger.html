@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>超薄挂架打孔计算器</title>
+    <title>伸缩挂架打孔计算器</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&display=swap');
@@ -24,7 +24,7 @@
         <!-- 极简头部 -->
         <div class="flex flex-col sm:flex-row sm:justify-between items-start sm:items-center mb-6 gap-4">
             <div>
-                <h1 class="text-3xl font-bold text-gray-900">超薄挂架打孔计算器</h1>
+                <h1 class="text-3xl font-bold text-gray-900">伸缩挂架打孔计算器</h1>
                 <p class="text-gray-500 text-sm mt-1">输入参数 → 自动计算 → 实时预览打孔位置</p>
             </div>
             <div class="flex flex-wrap gap-2">
@@ -79,9 +79,9 @@
                     </div>
                 </div>
 
-                <!-- 超薄挂架偏移参数 -->
+                <!-- 伸缩挂架偏移参数 -->
                 <div class="mb-8">
-                    <div class="text-xs uppercase tracking-widest text-gray-500 mb-3">超薄挂架偏移参数</div>
+                    <div class="text-xs uppercase tracking-widest text-gray-500 mb-3">伸缩挂架偏移参数</div>
                     <table class="w-full text-sm border-collapse">
                         <thead>
                             <tr class="border-b border-gray-100">
@@ -91,43 +91,28 @@
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-100">
-                            <!-- 左超薄 -->
+                            <!-- 伸缩挂架 -->
                             <tr>
                                 <td class="py-4">
                                     <div class="flex items-center gap-3">
-                                        <div class="w-6 h-6 bg-blue-500 rounded-lg flex items-center justify-center text-white text-[10px] font-bold">左</div>
-                                        <span class="font-medium text-gray-700">左超薄挂架（VX1，VY1）</span>
+                                        <div class="w-6 h-6 bg-purple-500 rounded-lg flex items-center justify-center text-white text-[10px] font-bold">伸</div>
+                                        <span class="font-medium text-gray-700">伸缩挂架（VX，VY）</span>
                                     </div>
                                 </td>
-                                <td class="input-table"><input id="VX1" type="number" step="0.1" value="25" 
+                                <td class="input-table"><input id="VX" type="number" step="0.1" value="45" 
                                        class="w-full px-4 py-2.5 border border-gray-200 rounded-2xl focus:border-blue-500 text-center text-base" 
                                        oninput="liveUpdate()"></td>
-                                <td class="input-table"><input id="VY1" type="number" step="0.1" value="55" 
-                                       class="w-full px-4 py-2.5 border border-gray-200 rounded-2xl focus:border-blue-500 text-center text-base" 
-                                       oninput="liveUpdate()"></td>
-                            </tr>
-                            <!-- 右超薄 -->
-                            <tr>
-                                <td class="py-4">
-                                    <div class="flex items-center gap-3">
-                                        <div class="w-6 h-6 bg-green-500 rounded-lg flex items-center justify-center text-white text-[10px] font-bold">右</div>
-                                        <span class="font-medium text-gray-700">右超薄挂架（VX2，VY2）</span>
-                                    </div>
-                                </td>
-                                <td class="input-table"><input id="VX2" type="number" step="0.1" value="95" 
-                                       class="w-full px-4 py-2.5 border border-gray-200 rounded-2xl focus:border-blue-500 text-center text-base" 
-                                       oninput="liveUpdate()"></td>
-                                <td class="input-table"><input id="VY2" type="number" step="0.1" value="55" 
+                                <td class="input-table"><input id="VY" type="number" step="0.1" value="30" 
                                        class="w-full px-4 py-2.5 border border-gray-200 rounded-2xl focus:border-blue-500 text-center text-base" 
                                        oninput="liveUpdate()"></td>
                             </tr>
                         </tbody>
                     </table>
-                    <!-- 超薄挂架测量示意图 -->
+                    <!-- 伸缩挂架测量示意图 -->
                     <div class="mt-4">
-                        <div class="text-xs uppercase tracking-widest text-gray-500 mb-3">超薄挂架测量示意图</div>
+                        <div class="text-xs uppercase tracking-widest text-gray-500 mb-3">伸缩挂架测量示意图</div>
                         <div class="bg-white rounded-2xl shadow-md p-4 border border-gray-200">
-                            <img src="2.jpg" alt="超薄挂架测量示意图" class="w-full h-auto rounded-xl object-contain">
+                            <img src="1.jpg" alt="伸缩挂架测量示意图" class="w-full h-auto rounded-xl object-contain">
                         </div>
                     </div>
                 </div>
@@ -148,12 +133,8 @@
                     
                     <div class="flex justify-center gap-8 mt-5 text-xs flex-wrap">
                         <div class="flex items-center gap-2">
-                            <div class="w-3 h-3 bg-blue-500 rounded"></div>
-                            <span>左超薄 (VX1/VY1)</span>
-                        </div>
-                        <div class="flex items-center gap-2">
-                            <div class="w-3 h-3 bg-green-500 rounded"></div>
-                            <span>右超薄 (VX2/VY2)</span>
+                            <div class="w-3 h-3 bg-purple-500 rounded"></div>
+                            <span>伸缩挂架 (VX/VY)</span>
                         </div>
                         <div class="flex items-center gap-2">
                             <div class="w-3 h-3 bg-blue-600 rounded"></div>
@@ -176,19 +157,18 @@
 
     <script>
         // ==================== 计算模块（不变） ====================
-        function calculatePositions(wall, tvLen, H, VX1, VY1, VX2, VY2) {
+        function calculatePositions(wall, tvLen, H, VX, VY) {
             if (!wall || !tvLen) return null;
             const X = (wall - tvLen) / 2;
             const Y = H;
             return {
                 tv: { X: X.toFixed(2), Y: Y.toFixed(2) },
-                leftUltra: { LX: (X + VX1).toFixed(2), LY: (Y + VY1).toFixed(2) },
-                rightUltra: { RX: (X + VX2).toFixed(2), RY: (Y + VY2).toFixed(2) }
+                ordinary: { X1: (X + VX).toFixed(2), Y1: (Y + VY).toFixed(2) }
             };
         }
 
         // ==================== 可视化模块（不变） ====================
-        function drawVisualization(pos, tvLen, tvHeight, wall, VX1, VY1, VX2, VY2) {
+        function drawVisualization(pos, tvLen, tvHeight, wall, VX, VY) {
             if (!pos) return;
             const canvas = document.getElementById('canvas');
             const ctx = canvas.getContext('2d');
@@ -224,8 +204,7 @@
                 ctx.fillStyle = '#1f2937'; ctx.font = '600 13px Noto Sans SC'; ctx.textAlign = 'left';
                 ctx.fillText(label, sx + 20, sy + 5);
             };
-            drawPoint(pos.leftUltra.LX, pos.leftUltra.LY, '#3b82f6', '左超薄');
-            drawPoint(pos.rightUltra.RX, pos.rightUltra.RY, '#22c55e', '右超薄');
+            drawPoint(pos.ordinary.X1, pos.ordinary.Y1, '#8b5cf6', '伸缩');
             drawPoint(pos.tv.X, pos.tv.Y, '#0369a1', '电视左下角');
 
             // 偏移线 + 标注（保持直观）
@@ -243,15 +222,11 @@
             };
 
             const tvX = tvRefX;
-            const leftX = marginL + parseFloat(pos.leftUltra.LX)*scaleX;
-            const leftY = groundY - parseFloat(pos.leftUltra.LY)*scaleY;
-            const rightX = marginL + parseFloat(pos.rightUltra.RX)*scaleX;
-            const rightY = groundY - parseFloat(pos.rightUltra.RY)*scaleY;
+            const ordX = marginL + parseFloat(pos.ordinary.X1)*scaleX;
+            const ordY = groundY - parseFloat(pos.ordinary.Y1)*scaleY;
 
-            drawHLine(leftX, tvX, tvBottom, '#3b82f6', `VX1=${VX1}`);
-            drawVLine(leftX, tvBottom, leftY, '#3b82f6', `VY1=${VY1}`);
-            drawHLine(rightX, tvX, tvBottom, '#22c55e', `VX2=${VX2}`);
-            drawVLine(rightX, tvBottom, rightY, '#22c55e', `VY2=${VY2}`);
+            drawHLine(ordX, tvX, tvBottom, '#8b5cf6', `VX=${VX}`);
+            drawVLine(ordX, tvBottom, ordY, '#8b5cf6', `VY=${VY}`);
             
             // 电视左下角示意线
             drawHLine(marginL, tvX, tvBottom, '#0369a1', `X=${pos.tv.X}`);
@@ -269,25 +244,14 @@
                     <div class="text-xs text-gray-500 mt-1">Y = ${pos.tv.Y} cm</div>
                 </div>
                 
-                <div class="bg-blue-50 border border-blue-100 rounded-2xl p-5">
+                <div class="bg-purple-50 border border-purple-100 rounded-2xl p-5">
                     <div class="flex gap-2 items-center mb-2">
-                        <div class="w-4 h-4 bg-blue-500 rounded"></div>
-                        <div class="text-xs text-blue-600">左超薄挂架</div>
+                        <div class="w-4 h-4 bg-purple-500 rounded"></div>
+                        <div class="text-xs text-purple-600">伸缩挂架</div>
                     </div>
                     <div class="text-sm space-y-1">
-                        <div>LX = ${pos.leftUltra.LX} cm</div>
-                        <div>LY = ${pos.leftUltra.LY} cm</div>
-                    </div>
-                </div>
-                
-                <div class="bg-green-50 border border-green-100 rounded-2xl p-5">
-                    <div class="flex gap-2 items-center mb-2">
-                        <div class="w-4 h-4 bg-green-500 rounded"></div>
-                        <div class="text-xs text-green-600">右超薄挂架</div>
-                    </div>
-                    <div class="text-sm space-y-1">
-                        <div>RX = ${pos.rightUltra.RX} cm</div>
-                        <div>RY = ${pos.rightUltra.RY} cm</div>
+                        <div>X1 = ${pos.ordinary.X1} cm</div>
+                        <div>Y1 = ${pos.ordinary.Y1} cm</div>
                     </div>
                 </div>
             `;
@@ -298,16 +262,14 @@
             const wall = parseFloat(document.getElementById('wall').value) || 0;
             const tvLen = parseFloat(document.getElementById('tvLen').value) || 0;
             const H = parseFloat(document.getElementById('H').value) || 60;
-            const VX1 = parseFloat(document.getElementById('VX1').value) || 0;
-            const VY1 = parseFloat(document.getElementById('VY1').value) || 0;
-            const VX2 = parseFloat(document.getElementById('VX2').value) || 0;
-            const VY2 = parseFloat(document.getElementById('VY2').value) || 0;
+            const VX = parseFloat(document.getElementById('VX').value) || 0;
+            const VY = parseFloat(document.getElementById('VY').value) || 0;
             const tvHeight = parseFloat(document.getElementById('tvHeight').value) || 65;
 
-            const pos = calculatePositions(wall, tvLen, H, VX1, VY1, VX2, VY2);
+            const pos = calculatePositions(wall, tvLen, H, VX, VY);
             if (pos) {
                 renderResults(pos);
-                drawVisualization(pos, tvLen, tvHeight, wall, VX1, VY1, VX2, VY2);
+                drawVisualization(pos, tvLen, tvHeight, wall, VX, VY);
             }
         }
 
@@ -316,19 +278,17 @@
             document.getElementById('tvLen').value = 120;
             document.getElementById('H').value = 60;
             document.getElementById('tvHeight').value = 65;
-            document.getElementById('VX1').value = 8;
-            document.getElementById('VY1').value = 12;
-            document.getElementById('VX2').value = 112;
-            document.getElementById('VY2').value = 12;
+            document.getElementById('VX').value = 10;
+            document.getElementById('VY').value = 15;
             liveUpdate();
         }
 
         function exportResults() {
-            const text = `超薄挂架打孔结果\n\n${document.getElementById('results').innerText}\n生成时间：${new Date().toLocaleString('zh-CN')}`;
+            const text = `伸缩挂架打孔结果\n\n${document.getElementById('results').innerText}\n生成时间：${new Date().toLocaleString('zh-CN')}`;
             const blob = new Blob([text], {type: 'text/plain'});
             const a = document.createElement('a');
             a.href = URL.createObjectURL(blob);
-            a.download = `超薄挂架打孔_${new Date().toISOString().slice(0,10)}.txt`;
+            a.download = `伸缩挂架打孔_${new Date().toISOString().slice(0,10)}.txt`;
             a.click();
             alert('✅ 已导出！（截图预览请使用浏览器工具）');
         }
