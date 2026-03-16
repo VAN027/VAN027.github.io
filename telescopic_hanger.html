@@ -131,10 +131,14 @@
                     </div>
                     <canvas id="canvas" width="820" height="460" class="w-full rounded-2xl"></canvas>
                     
-                    <div class="flex justify-center gap-8 mt-5 text-xs">
+                    <div class="flex justify-center gap-8 mt-5 text-xs flex-wrap">
                         <div class="flex items-center gap-2">
                             <div class="w-3 h-3 bg-purple-500 rounded"></div>
                             <span>伸缩挂架 (VX/VY)</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <div class="w-3 h-3 bg-blue-600 rounded"></div>
+                            <span>电视左下角 (X/Y)</span>
                         </div>
                     </div>
                 </div>
@@ -201,6 +205,7 @@
                 ctx.fillText(label, sx + 20, sy + 5);
             };
             drawPoint(pos.ordinary.X1, pos.ordinary.Y1, '#8b5cf6', '伸缩');
+            drawPoint(pos.tv.X, pos.tv.Y, '#0369a1', '电视左下角');
 
             // 偏移线 + 标注（保持直观）
             const drawHLine = (startX, endX, y, color, txt) => {
@@ -220,8 +225,12 @@
             const ordX = marginL + parseFloat(pos.ordinary.X1)*scaleX;
             const ordY = groundY - parseFloat(pos.ordinary.Y1)*scaleY;
 
-            drawHLine(tvX, ordX, tvBottom, '#8b5cf6', `VX=${VX}`);
+            drawHLine(ordX, tvX, tvBottom, '#8b5cf6', `VX=${VX}`);
             drawVLine(ordX, tvBottom, ordY, '#8b5cf6', `VY=${VY}`);
+            
+            // 电视左下角示意线
+            drawHLine(marginL, tvX, tvBottom, '#0369a1', `X=${pos.tv.X}`);
+            drawVLine(tvX, groundY, tvBottom, '#0369a1', `Y=${pos.tv.Y}`);
 
             document.getElementById('scaleInfo').textContent = `1cm ≈ ${scaleX.toFixed(1)}px`;
         }
