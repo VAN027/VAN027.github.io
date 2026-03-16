@@ -146,7 +146,7 @@
                     </div>
                     <canvas id="canvas" width="820" height="460" class="w-full rounded-2xl"></canvas>
                     
-                    <div class="flex justify-center gap-8 mt-5 text-xs">
+                    <div class="flex justify-center gap-8 mt-5 text-xs flex-wrap">
                         <div class="flex items-center gap-2">
                             <div class="w-3 h-3 bg-blue-500 rounded"></div>
                             <span>左超薄 (VX1/VY1)</span>
@@ -154,6 +154,10 @@
                         <div class="flex items-center gap-2">
                             <div class="w-3 h-3 bg-green-500 rounded"></div>
                             <span>右超薄 (VX2/VY2)</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <div class="w-3 h-3 bg-blue-600 rounded"></div>
+                            <span>电视左下角 (X/Y)</span>
                         </div>
                     </div>
                 </div>
@@ -222,6 +226,7 @@
             };
             drawPoint(pos.leftUltra.LX, pos.leftUltra.LY, '#3b82f6', '左超薄');
             drawPoint(pos.rightUltra.RX, pos.rightUltra.RY, '#22c55e', '右超薄');
+            drawPoint(pos.tv.X, pos.tv.Y, '#0369a1', '电视左下角');
 
             // 偏移线 + 标注（保持直观）
             const drawHLine = (startX, endX, y, color, txt) => {
@@ -243,10 +248,14 @@
             const rightX = marginL + parseFloat(pos.rightUltra.RX)*scaleX;
             const rightY = groundY - parseFloat(pos.rightUltra.RY)*scaleY;
 
-            drawHLine(tvX, leftX, tvBottom, '#3b82f6', `VX1=${VX1}`);
+            drawHLine(leftX, tvX, tvBottom, '#3b82f6', `VX1=${VX1}`);
             drawVLine(leftX, tvBottom, leftY, '#3b82f6', `VY1=${VY1}`);
-            drawHLine(tvX, rightX, tvBottom, '#22c55e', `VX2=${VX2}`);
+            drawHLine(rightX, tvX, tvBottom, '#22c55e', `VX2=${VX2}`);
             drawVLine(rightX, tvBottom, rightY, '#22c55e', `VY2=${VY2}`);
+            
+            // 电视左下角示意线
+            drawHLine(marginL, tvX, tvBottom, '#0369a1', `X=${pos.tv.X}`);
+            drawVLine(tvX, groundY, tvBottom, '#0369a1', `Y=${pos.tv.Y}`);
 
             document.getElementById('scaleInfo').textContent = `1cm ≈ ${scaleX.toFixed(1)}px`;
         }
