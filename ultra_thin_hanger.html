@@ -248,9 +248,9 @@
             const rightX = marginL + parseFloat(pos.rightUltra.RX)*scaleX;
             const rightY = groundY - parseFloat(pos.rightUltra.RY)*scaleY;
 
-            drawHLine(leftX, tvX, tvBottom, '#3b82f6', `VX1=${VX1}`);
+            drawHLine(leftX, tvX, leftY, '#3b82f6', `VX1=${VX1}`);
             drawVLine(leftX, tvBottom, leftY, '#3b82f6', `VY1=${VY1}`);
-            drawHLine(rightX, tvX, tvBottom, '#22c55e', `VX2=${VX2}`);
+            drawHLine(rightX, tvX, rightY, '#22c55e', `VX2=${VX2}`);
             drawVLine(rightX, tvBottom, rightY, '#22c55e', `VY2=${VY2}`);
             
             // 电视左下角示意线
