@@ -36,6 +36,10 @@
                         class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-sm font-medium rounded-2xl flex items-center gap-2 transition btn-mobile">
                     重置
                 </button>
+                <button id="unitToggle" onclick="toggleUnit()" 
+                        class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-sm font-medium rounded-2xl flex items-center gap-2 transition btn-mobile">
+                    切换到 mm
+                </button>
                 <button onclick="exportResults()" 
                         class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-2xl flex items-center gap-2 transition btn-mobile">
                     导出结果
@@ -54,25 +58,25 @@
                     <div class="grid grid-cols-2 gap-5">
                         <div>
                             <label class="block text-xs text-gray-500 mb-1">背景墙长度 (cm)</label>
-                            <input id="wall" type="number" step="0.1" value="300" 
+                            <input id="wall" type="number" step="0.01" value="300" 
                                    class="w-full px-4 py-3 border border-gray-200 rounded-2xl focus:border-blue-500 text-base"
                                    oninput="liveUpdate()">
                         </div>
                         <div>
                             <label class="block text-xs text-gray-500 mb-1">电视机长度 (cm)</label>
-                            <input id="tvLen" type="number" step="0.1" value="120" 
+                            <input id="tvLen" type="number" step="0.01" value="120" 
                                    class="w-full px-4 py-3 border border-gray-200 rounded-2xl focus:border-blue-500 text-base"
                                    oninput="liveUpdate()">
                         </div>
                         <div>
                             <label class="block text-xs text-gray-500 mb-1">电视底端高度 H (cm)</label>
-                            <input id="H" type="number" step="0.1" value="65" 
+                            <input id="H" type="number" step="0.01" value="65" 
                                    class="w-full px-4 py-3 border border-gray-200 rounded-2xl focus:border-blue-500 text-base"
                                    oninput="liveUpdate()">
                         </div>
                         <div>
                             <label class="block text-xs text-gray-500 mb-1">电视高度 (预览用 cm)</label>
-                            <input id="tvHeight" type="number" step="0.1" value="80" 
+                            <input id="tvHeight" type="number" step="0.01" value="80" 
                                    class="w-full px-4 py-3 border border-gray-200 rounded-2xl focus:border-blue-500 text-base"
                                    oninput="liveUpdate()">
                         </div>
@@ -99,10 +103,10 @@
                                         <span class="font-medium text-gray-700">左超薄挂架（VX1，VY1）</span>
                                     </div>
                                 </td>
-                                <td class="input-table"><input id="VX1" type="number" step="0.1" value="25" 
+                                <td class="input-table"><input id="VX1" type="number" step="0.01" value="25" 
                                        class="w-full px-4 py-2.5 border border-gray-200 rounded-2xl focus:border-blue-500 text-center text-base" 
                                        oninput="liveUpdate()"></td>
-                                <td class="input-table"><input id="VY1" type="number" step="0.1" value="55" 
+                                <td class="input-table"><input id="VY1" type="number" step="0.01" value="55" 
                                        class="w-full px-4 py-2.5 border border-gray-200 rounded-2xl focus:border-blue-500 text-center text-base" 
                                        oninput="liveUpdate()"></td>
                             </tr>
@@ -114,10 +118,10 @@
                                         <span class="font-medium text-gray-700">右超薄挂架（VX2，VY2）</span>
                                     </div>
                                 </td>
-                                <td class="input-table"><input id="VX2" type="number" step="0.1" value="95" 
+                                <td class="input-table"><input id="VX2" type="number" step="0.01" value="95" 
                                        class="w-full px-4 py-2.5 border border-gray-200 rounded-2xl focus:border-blue-500 text-center text-base" 
                                        oninput="liveUpdate()"></td>
-                                <td class="input-table"><input id="VY2" type="number" step="0.1" value="55" 
+                                <td class="input-table"><input id="VY2" type="number" step="0.01" value="55" 
                                        class="w-full px-4 py-2.5 border border-gray-200 rounded-2xl focus:border-blue-500 text-center text-base" 
                                        oninput="liveUpdate()"></td>
                             </tr>
@@ -175,15 +179,80 @@
     </div>
 
     <script>
+        // ==================== 单位切换功能 ====================
+        let currentUnit = 'cm'; // 默认单位为厘米
+        
+        function toggleUnit() {
+            currentUnit = currentUnit === 'cm' ? 'mm' : 'cm';
+            document.getElementById('unitToggle').textContent = `切换到 ${currentUnit === 'cm' ? 'mm' : 'cm'}`;
+            updateUnitLabels();
+            updateInputValues();
+            liveUpdate();
+        }
+        
+        function updateUnitLabels() {
+            // 更新输入框标签
+            document.querySelectorAll('label').forEach(label => {
+                if (label.textContent.includes('(cm)')) {
+                    label.textContent = label.textContent.replace('(cm)', `(${currentUnit})`);
+                } else if (label.textContent.includes('(mm)')) {
+                    label.textContent = label.textContent.replace('(mm)', `(${currentUnit})`);
+                }
+            });
+            
+            // 更新表头中的单位
+            document.querySelectorAll('th').forEach(th => {
+                if (th.textContent.includes('(cm)')) {
+                    th.textContent = th.textContent.replace('(cm)', `(${currentUnit})`);
+                } else if (th.textContent.includes('(mm)')) {
+                    th.textContent = th.textContent.replace('(mm)', `(${currentUnit})`);
+                }
+            });
+        }
+        
+        // 格式化数值根据当前单位
+        function formatValue(value) {
+            if (currentUnit === 'cm') {
+                return parseFloat(value).toFixed(2);
+            } else {
+                return Math.round(parseFloat(value) * 10);
+            }
+        }
+        
+        // 单位切换时更新输入值
+        function updateInputValues() {
+            const inputs = [
+                document.getElementById('wall'),
+                document.getElementById('tvLen'),
+                document.getElementById('H'),
+                document.getElementById('VX1'),
+                document.getElementById('VY1'),
+                document.getElementById('VX2'),
+                document.getElementById('VY2'),
+                document.getElementById('tvHeight')
+            ];
+            
+            inputs.forEach(input => {
+                if (input) {
+                    const value = parseFloat(input.value) || 0;
+                    if (currentUnit === 'mm') {
+                        input.value = (value * 10).toFixed(0);
+                    } else {
+                        input.value = (value / 10).toFixed(1);
+                    }
+                }
+            });
+        }
+        
         // ==================== 计算模块（不变） ====================
         function calculatePositions(wall, tvLen, H, VX1, VY1, VX2, VY2) {
             if (!wall || !tvLen) return null;
             const X = (wall - tvLen) / 2;
             const Y = H;
             return {
-                tv: { X: X.toFixed(2), Y: Y.toFixed(2) },
-                leftUltra: { LX: (X + VX1).toFixed(2), LY: (Y + VY1).toFixed(2) },
-                rightUltra: { RX: (X + VX2).toFixed(2), RY: (Y + VY2).toFixed(2) }
+                tv: { X: X, Y: Y },
+                leftUltra: { LX: (X + VX1), LY: (Y + VY1) },
+                rightUltra: { RX: (X + VX2), RY: (Y + VY2) }
             };
         }
 
@@ -248,16 +317,16 @@
             const rightX = marginL + parseFloat(pos.rightUltra.RX)*scaleX;
             const rightY = groundY - parseFloat(pos.rightUltra.RY)*scaleY;
 
-            drawHLine(leftX, tvX, leftY, '#3b82f6', `VX1=${VX1}`);
-            drawVLine(leftX, tvBottom, leftY, '#3b82f6', `VY1=${VY1}`);
-            drawHLine(rightX, tvX, rightY, '#22c55e', `VX2=${VX2}`);
-            drawVLine(rightX, tvBottom, rightY, '#22c55e', `VY2=${VY2}`);
+            drawHLine(leftX, tvX, leftY, '#3b82f6', `VX1=${formatValue(VX1)}`);
+            drawVLine(leftX, tvBottom, leftY, '#3b82f6', `VY1=${formatValue(VY1)}`);
+            drawHLine(rightX, tvX, rightY, '#22c55e', `VX2=${formatValue(VX2)}`);
+            drawVLine(rightX, tvBottom, rightY, '#22c55e', `VY2=${formatValue(VY2)}`);
             
             // 电视左下角示意线
-            drawHLine(marginL, tvX, tvBottom, '#0369a1', `X=${pos.tv.X}`);
-            drawVLine(tvX, groundY, tvBottom, '#0369a1', `Y=${pos.tv.Y}`);
+            drawHLine(marginL, tvX, tvBottom, '#0369a1', `X=${formatValue(pos.tv.X)}`);
+            drawVLine(tvX, groundY, tvBottom, '#0369a1', `Y=${formatValue(pos.tv.Y)}`);
 
-            document.getElementById('scaleInfo').textContent = `1cm ≈ ${scaleX.toFixed(1)}px`;
+            document.getElementById('scaleInfo').textContent = `1${currentUnit} ≈ ${scaleX.toFixed(1)}px`;
         }
 
         // ==================== 结果模块（更紧凑） ====================
@@ -265,8 +334,8 @@
             document.getElementById('results').innerHTML = `
                 <div class="bg-blue-50 border border-blue-100 rounded-2xl p-5">
                     <div class="text-[10px] text-blue-600 mb-1">电视左下角</div>
-                    <div class="text-4xl font-semibold text-blue-900">${pos.tv.X} <span class="text-base font-normal text-gray-400">cm</span></div>
-                    <div class="text-xs text-gray-500 mt-1">Y = ${pos.tv.Y} cm</div>
+                    <div class="text-4xl font-semibold text-blue-900">${formatValue(pos.tv.X)} <span class="text-base font-normal text-gray-400">${currentUnit}</span></div>
+                    <div class="text-xs text-gray-500 mt-1">Y = ${formatValue(pos.tv.Y)} ${currentUnit}</div>
                 </div>
                 
                 <div class="bg-blue-50 border border-blue-100 rounded-2xl p-5">
@@ -275,8 +344,8 @@
                         <div class="text-xs text-blue-600">左超薄挂架</div>
                     </div>
                     <div class="text-sm space-y-1">
-                        <div>LX = ${pos.leftUltra.LX} cm</div>
-                        <div>LY = ${pos.leftUltra.LY} cm</div>
+                        <div>LX = ${formatValue(pos.leftUltra.LX)} ${currentUnit}</div>
+                        <div>LY = ${formatValue(pos.leftUltra.LY)} ${currentUnit}</div>
                     </div>
                 </div>
                 
@@ -286,8 +355,8 @@
                         <div class="text-xs text-green-600">右超薄挂架</div>
                     </div>
                     <div class="text-sm space-y-1">
-                        <div>RX = ${pos.rightUltra.RX} cm</div>
-                        <div>RY = ${pos.rightUltra.RY} cm</div>
+                        <div>RX = ${formatValue(pos.rightUltra.RX)} ${currentUnit}</div>
+                        <div>RY = ${formatValue(pos.rightUltra.RY)} ${currentUnit}</div>
                     </div>
                 </div>
             `;
@@ -295,15 +364,17 @@
 
         // ==================== 主逻辑 ====================
         function liveUpdate() {
-            const wall = parseFloat(document.getElementById('wall').value) || 0;
-            const tvLen = parseFloat(document.getElementById('tvLen').value) || 0;
-            const H = parseFloat(document.getElementById('H').value) || 60;
-            const VX1 = parseFloat(document.getElementById('VX1').value) || 0;
-            const VY1 = parseFloat(document.getElementById('VY1').value) || 0;
-            const VX2 = parseFloat(document.getElementById('VX2').value) || 0;
-            const VY2 = parseFloat(document.getElementById('VY2').value) || 0;
-            const tvHeight = parseFloat(document.getElementById('tvHeight').value) || 65;
+            // 获取输入值
+            let wall = parseFloat(document.getElementById('wall').value) || 0;
+            let tvLen = parseFloat(document.getElementById('tvLen').value) || 0;
+            let H = parseFloat(document.getElementById('H').value) || 60;
+            let VX1 = parseFloat(document.getElementById('VX1').value) || 0;
+            let VY1 = parseFloat(document.getElementById('VY1').value) || 0;
+            let VX2 = parseFloat(document.getElementById('VX2').value) || 0;
+            let VY2 = parseFloat(document.getElementById('VY2').value) || 0;
+            let tvHeight = parseFloat(document.getElementById('tvHeight').value) || 65;
 
+            // 计算位置
             const pos = calculatePositions(wall, tvLen, H, VX1, VY1, VX2, VY2);
             if (pos) {
                 renderResults(pos);
